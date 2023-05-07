@@ -71,7 +71,7 @@ ul.todolist {
   position: relative;
 }
 
-ul.todoList li {
+ul.todolist li {
   font-size: 14px;
   font-weight: 500;
   color: #444;
@@ -106,9 +106,8 @@ ul.todolist button.remove {
   right: 50px;
 }
 
-
-ul.todolist button:last-of-type:before {
-  content: '';
+ul.todolist button:last-of-type::before {
+  content: "";
   width: 1px;
   height: 30px;
   background: #edf0f1;
@@ -179,23 +178,23 @@ ul.todolist li.todo + li.completed::before {
 
 ul.todolist:empty::before {
   width: 150px;
-  content: 'You have nothing to-do!';
+  content: "You have nothing to-do!";
 }
 
 ul.todolist:empty::after {
   top: 70px;
   border-top: solid 1px #d8e5e0;
-  content: 'You have yet to complete any tasks.';
+  content: "You have yet to complete any tasks.";
 }
 
 ul.todolist li.todo:last-of-type {
   margin-bottom: 80px;
 }
 
-ul.todolist li.todo:last-of-type::after {  
+ul.todolist li.todo:last-of-type::after {
   bottom: -80px;
   border-top: solid 1px #d8e5e0;
-  content: 'You have yet to complete any tasks.';
+  content: "You have yet to complete any tasks.";
 }
 
 ul.todolist li.completed:first-of-type {
@@ -205,7 +204,7 @@ ul.todolist li.completed:first-of-type {
 ul.todolist li.completed:first-of-type::before {
   bottom: 80px;
   border-bottom: solid 1px #d8e5e0;
-  content: 'You have nothing to-do!';
+  content: "You have nothing to-do!";
 }
 
 ul.todolist li.todo + li.completed {
@@ -215,7 +214,7 @@ ul.todolist li.todo + li.completed {
 
 ul.todolist li.todo + li.completed::before {
   width: 150px;
-  content: '';
+  content: "";
   top: -30px;
   border-top: solid 1px #d8e5e0;
 }

@@ -1,9 +1,9 @@
-import path from 'path';
-import url from 'url';
+import path from "path";
+import url from "url";
 
 function check(rule, pathname) {
-  rule = rule.split(url.req).join('/');
-  const ruleExp = new RegExp(`^${rule.replace(/:[^/]+/g, '([^/]+)')}$`);
+  rule = rule.split(path.sep).join("/");
+  const ruleExp = new RegExp(`^${rule.replace(/:[^/]+/g, "([^/]+)")}$`);
   const ruleMatch = pathname.match(ruleExp);
 
   if (ruleMatch) {
@@ -28,37 +28,37 @@ function route(method, rule, aspect) {
       ctx.url = url.parse(`http://${req.headers.host}${req.url}`);
     }
     const checked = check(rule, ctx.url.pathname);
-    if (!ctx.route && (method === '*' || method === req.method) && !!checked) {
+    if (!ctx.route && (method === "*" || method === req.method) && !!checked) {
       ctx.route = checked;
       await aspect(ctx, next);
     } else {
       await next();
     }
-  }
+  };
 }
 
 export default class Router {
-  constructor(url = '') {
+  constructor(url = "") {
     this.baseUrl = url;
   }
 
   get(rule, aspect) {
-    return route('GET', path.join(this.baseUrl, rule), aspect);
+    return route("GET", path.join(this.baseUrl, rule), aspect);
   }
 
   post(rule, aspect) {
-    return route('POST', path.join(this.baseUrl, rule), aspect);
+    return route("POST", path.join(this.baseUrl, rule), aspect);
   }
 
   put(rule, aspect) {
-    return route('PUT', path.join(this.baseUrl, rule), aspect);
+    return route("PUT", path.join(this.baseUrl, rule), aspect);
   }
 
   delete(rule, aspect) {
-    return route('DELETE', path.join(this.baseUrl, rule), aspect);
+    return route("DELETE", path.join(this.baseUrl, rule), aspect);
   }
 
   all(rule, aspect) {
-    return route('*', path.join(this.baseUrl, rule), aspect);
+    return route("*", path.join(this.baseUrl, rule), aspect);
   }
 }

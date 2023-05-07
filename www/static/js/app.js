@@ -15,20 +15,20 @@ const completeSVG = `
   </g>
 </svg>
 `;
-const states = ['todo', 'completed'];
+const states = ["todo", "completed"];
 
-function addItem(id, list, text, state = 'todo') {
-  const item = document.createElement('li');
+function addItem(id, list, text, state = "todo") {
+  const item = document.createElement("li");
   item.className = state;
   item.innerHTML = `${text}<button class="remove">${removeSVG}</button><button class="complete">${completeSVG}</button>`;
   list.insertBefore(item, list.children[0]);
 
   item.dataset.id = id;
 
-  const completeBtn = item.querySelector('button.complete');
-  completeBtn.addEventListener('click', () => {
+  const completeBtn = item.querySelector("button.complete");
+  completeBtn.addEventListener("click", () => {
     const id = item.dataset.id;
-    if (item.className === 'todo') {
+    if (item.className === "todo") {
       updateItem(id, 1);
       completeItem(item);
     } else {
@@ -37,8 +37,8 @@ function addItem(id, list, text, state = 'todo') {
     }
   });
 
-  const removeBtn = item.querySelector('button.remove');
-  removeBtn.addEventListener('click', () => {
+  const removeBtn = item.querySelector("button.remove");
+  removeBtn.addEventListener("click", () => {
     updateItem(id, 2);
     removeItem(item);
   });
@@ -48,19 +48,19 @@ function addItem(id, list, text, state = 'todo') {
 
 function completeItem(item) {
   const parent = item.parentNode;
-  const completedItem = parent.querySelector('li.completed');
+  const completedItem = parent.querySelector("li.completed");
   if (completedItem) {
     parent.insertBefore(item, completedItem);
   } else {
     parent.appendChild(item);
   }
-  item.className = 'completed';
+  item.className = "completed";
 }
 
 function uncompleteItem(item) {
   const parent = item.parentNode;
   parent.insertBefore(item, parent.children[0]);
-  item.className = 'todo';
+  item.className = "todo";
 }
 
 function removeItem(item) {
@@ -69,58 +69,63 @@ function removeItem(item) {
 }
 
 async function updateItem(id, state) {
-  const result = await (await fetch('/update', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `id=${id}&state=${state}`
-  })).json();
+  const result = await (
+    await fetch("/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `id=${id}&state=${state}`,
+    })
+  ).json();
 
   return result;
 }
 
 async function saveItem(text) {
-  const result = await (await fetch('/add', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: `text=${text}&state=0`
-  })).json();
+  const result = await (
+    await fetch("/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: `text=${text}&state=0`,
+    })
+  ).json();
 
   return result;
 }
 
 async function loadItems(list) {
-  const { err, data } = await (await fetch('/list')).json();
+  const { err, data } = await (await fetch("/list")).json();
   if (err) {
-    window.location.replace('/login.html');
+    window.location.replace("/login.html");
   } else {
-    data.forEach(({ id, text, state}) => addItem(id, list, text, states[state]))
+    data.forEach(({ id, text, state }) =>
+      addItem(id, list, text, states[state])
+    );
   }
 }
 
-const list = document.querySelector('ul.todolist');
-const addItemBtn = document.getElementById('addItem');
-const inputText = document.getElementById('itemText');
+const list = document.querySelector("ul.todolist");
+const addItemBtn = document.getElementById("addItem");
+const inputText = document.getElementById("itemText");
 
-addItemBtn.addEventListener('click', async () => {
+addItemBtn.addEventListener("click", async () => {
   const value = inputText.value;
   if (value) {
     const result = await saveItem(value);
     if (!result.err) {
-      addItem(result.data.lastID, list, text);
-      inputText.value = '';
+      addItem(result.data.lastID, list, value);
+      inputText.value = "";
       inputText.focus();
-    } else 
-    throw new Error(result.err);
+    } else throw new Error(result.err);
   }
 });
 
-window.addEventListener('keydown', (event) => {
+window.addEventListener("keydown", (event) => {
   const { code } = event;
-  if (code === 'Enter' || code === 'NumpadEnter') {
+  if (code === "Enter" || code === "NumpadEnter") {
     addItemBtn.click();
   }
 });
